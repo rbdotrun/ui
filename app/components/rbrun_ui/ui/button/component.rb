@@ -58,7 +58,7 @@ class RbrunUi::Ui::Button::Component < RbrunUi::ApplicationViewComponent
 
     variants do
       variant do
-        primary   { %w[bg-stone-900 text-white hover:bg-stone-800] }
+        primary   { %w[bg-primary text-white hover:opacity-90] }
         secondary { %w[bg-secondary text-stone-900 border border-border hover:bg-stone-200] }
         ghost     { %w[bg-transparent text-stone-700 hover:bg-secondary] }
       end
