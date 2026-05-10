@@ -55,5 +55,5 @@ pin_all_from RbrunUi::Engine.root.join("app/components/rbrun_ui/ui"),
 # is the only consumer; if the host needs Floating UI it pins its own.
 pin "@floating-ui/dom",       to: "https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.7.4/+esm"
 pin "@floating-ui/core",      to: "https://cdn.jsdelivr.net/npm/@floating-ui/core@1.6.9/+esm"
-pin "@floating-ui/utils",     to: "https://cdn.jsdelivr.net/npm/@floating-ui/utils@0.3.0/+esm"
-pin "@floating-ui/utils/dom", to: "https://cdn.jsdelivr.net/npm/@floating-ui/utils@0.3.0/dom/+esm"
+pin "@floating-ui/utils",     to: "https://cdn.jsdelivr.net/npm/@floating-ui/utils@0.2.11/+esm"
+pin "@floating-ui/utils/dom", to: "https://cdn.jsdelivr.net/npm/@floating-ui/utils@0.2.11/dom/+esm"
