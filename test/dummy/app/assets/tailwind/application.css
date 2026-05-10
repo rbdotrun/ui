@@ -1,0 +1,6 @@
+/* Dummy app's Tailwind input. The component test suite doesn't actually
+ * compile Tailwind (we render against ViewComponent::TestCase, which
+ * doesn't process the asset pipeline). This file exists so the install
+ * generator has a target to test against if you want to dogfood it
+ * inside the dummy. */
+@import "tailwindcss";

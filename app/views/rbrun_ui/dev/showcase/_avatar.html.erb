@@ -1,0 +1,21 @@
+<div class="mt-4 grid gap-4">
+  <%= render "swatch",
+             title: "Initials fallback",
+             description: "With no image provided, the avatar derives initials from `name:` and renders them on a tinted disc. Use this as the default — image avatars are a progressive enhancement." do %>
+    <div class="flex items-center gap-3">
+      <%= ui("avatar", name: "Alice Johnson", size: :sm) %>
+      <%= ui("avatar", name: "Alice Johnson", size: :md) %>
+      <%= ui("avatar", name: "Alice Johnson", size: :lg) %>
+      <%= ui("avatar", name: "Alice Johnson", size: :xl) %>
+    </div>
+  <% end %>
+
+  <%= render "swatch",
+             title: "Explicit initials + image",
+             description: "Pass `initials:` to override the derivation (useful for names that don't tokenise cleanly), or `src:` to render a real image — the initials still ship as the alt-text fallback when the image fails." do %>
+    <div class="flex items-center gap-3">
+      <%= ui("avatar", name: "Zero Zero", initials: "00") %>
+      <%= ui("avatar", name: "Docs Bot", src: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=128&h=128&fit=crop", size: :lg) %>
+    </div>
+  <% end %>
+</div>

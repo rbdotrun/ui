@@ -1,0 +1,75 @@
+<%# RbrunUi::Ui::Select swatches — form-facing custom select. Hidden input gets
+    the value; trigger label updates on selection; popover closes;
+    `change` event fires for form_with auto-submit. %>
+<div class="mt-4 grid gap-4">
+  <%= render "swatch",
+             title: "Default — array options, no preselection",
+             description: "Pass `options:` as `[[label, value], …]` and the select renders a placeholder until the user picks. The hidden input named `name:` gets the chosen value; the trigger button shows the matching label." do %>
+    <%= ui("select",
+                  name: "demo[role]",
+                  options: [["Admin", "admin"], ["Member", "member"], ["Viewer", "viewer"]]) %>
+  <% end %>
+
+  <%= render "swatch",
+             title: "Hash options + preselected value",
+             description: "`options:` also accepts a hash (`{ value => label }`) for terse declarations, and `value:` preselects the matching option on first render — useful for edit forms hydrated from the model." do %>
+    <%= ui("select",
+                  name: "demo[plan]",
+                  options: { "free" => "Free", "pro" => "Pro", "enterprise" => "Enterprise" },
+                  value: "pro") %>
+  <% end %>
+
+  <%= render "swatch",
+             title: "Sizes",
+             description: "Three size tiers matching the rest of the form vocabulary. Pick sm for inline filters and toolbars, md for ordinary forms, lg when the select is the centrepiece of a flow." do %>
+    <%= ui("select",
+                  name: "demo[size_sm]",
+                  options: [["Small", "sm"], ["Medium", "md"], ["Large", "lg"]],
+                  size: :sm) %>
+    <%= ui("select",
+                  name: "demo[size_md]",
+                  options: [["Small", "sm"], ["Medium", "md"], ["Large", "lg"]],
+                  size: :md) %>
+    <%= ui("select",
+                  name: "demo[size_lg]",
+                  options: [["Small", "sm"], ["Medium", "md"], ["Large", "lg"]],
+                  size: :lg) %>
+  <% end %>
+
+  <%= render "swatch",
+             title: "Custom placeholder",
+             description: "Override the empty-state text via `placeholder:`. Use a noun phrase that hints at the input domain — \"Pick a country…\" beats the generic default the moment the option set isn't obvious from context." do %>
+    <%= ui("select",
+                  name: "demo[country]",
+                  placeholder: "Pick a country…",
+                  options: [["France", "fr"], ["Germany", "de"], ["Spain", "es"], ["Italy", "it"]]) %>
+  <% end %>
+
+  <%= render "swatch",
+             title: "Inside a real form (logs the chosen value)",
+             description: "Drops into `form_with` like any input. The hidden field carries the value through Rails' params; selection fires `change`, so combining with `local: false` and a Stimulus controller is enough for auto-submit filters." do %>
+    <%= form_with url: "#", method: :get, local: true, class: "flex items-center gap-3" do %>
+      <%= ui("select",
+                    name: "filter[status]",
+                    options: [["All", "all"], ["Open", "open"], ["Closed", "closed"]],
+                    value: "open") %>
+      <%= ui("button", label: "Apply", type: "submit") %>
+    <% end %>
+  <% end %>
+
+  <%= render "swatch",
+             title: "Searchable grouped multi-select + footer action",
+             description: "The full kitchen-sink: `multiple: true` switches to checkbox semantics with array values, `searchable: true` filters the option list, `groups:` emits labelled sub-headers, and `footer_action:` pins a CTA at the bottom of the popup." do %>
+    <%= ui("select",
+                  name: "demo[people]",
+                  multiple: true,
+                  searchable: true,
+                  placeholder: "Pick teammates…",
+                  value: ["alice", "claire"],
+                  groups: [
+                    { label: "Engineering", options: [["Alice", "alice"], ["Bob", "bob"]] },
+                    { label: "Design",      options: [["Claire", "claire"], ["Drew", "drew"]] }
+                  ],
+                  footer_action: { label: "Add teammate", href: "#" }) %>
+  <% end %>
+</div>

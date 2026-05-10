@@ -1,0 +1,67 @@
+<div class="mt-4 grid gap-4">
+  <%= render "swatch",
+             title: "Variants",
+             description: "The three core button styles. Primary for the main action on the page; secondary for adjacent or alternate actions; ghost for tertiary affordances that shouldn't compete visually." do %>
+    <%= ui "button", label: "Primary",   variant: :primary %>
+    <%= ui "button", label: "Secondary", variant: :secondary %>
+    <%= ui "button", label: "Ghost",     variant: :ghost %>
+  <% end %>
+
+  <%= render "swatch",
+             title: "Sizes",
+             description: "Small for dense toolbars and inline actions, default for most page actions, large for prominent calls-to-action. Stick to one size per cluster — mixing reads as accidental." do %>
+    <%= ui "button", label: "Small",   size: :sm %>
+    <%= ui "button", label: "Default", size: :md %>
+    <%= ui "button", label: "Large",   size: :lg %>
+  <% end %>
+
+  <%= render "swatch",
+             title: "Icon + label",
+             description: "Add `icon:` to anchor the action verb visually. The icon scales with the button size and sits to the left of the label with a fixed gap." do %>
+    <%= ui "button", label: "Upload",   icon: "arrow-up" %>
+    <%= ui "button", label: "Download", icon: "arrow-down", variant: :secondary %>
+    <%= ui "button", label: "Delete",   icon: "trash-2",    variant: :ghost %>
+  <% end %>
+
+  <%= render "swatch",
+             title: "Icon-only — sizes",
+             description: "Square icon buttons for toolbars and row-action gutters. Always pair with `aria-label` (the component handles this when only `icon:` is passed) so screen readers can announce the action." do %>
+    <%= ui "button", icon: "arrow-up", size: :sm %>
+    <%= ui "button", icon: "arrow-up", size: :md %>
+    <%= ui "button", icon: "arrow-up", size: :lg %>
+  <% end %>
+
+  <%= render "swatch",
+             title: "Icon-only — variants",
+             description: "Same variant ladder as labelled buttons. Reach for ghost in repeated row contexts where a primary fill would dominate the table." do %>
+    <%= ui "button", icon: "arrow-up", variant: :primary %>
+    <%= ui "button", icon: "arrow-up", variant: :secondary %>
+    <%= ui "button", icon: "arrow-up", variant: :ghost %>
+  <% end %>
+
+  <%= render "swatch",
+             title: "Disabled",
+             description: "Renders as visually muted and `aria-disabled`. The button is still focusable so users can tab through and read its tooltip — prefer this to hiding the action when the disabled reason is recoverable." do %>
+    <%= ui "button", label: "Primary",   disabled: true %>
+    <%= ui "button", label: "Secondary", variant: :secondary, disabled: true %>
+    <%= ui "button", label: "Ghost",     variant: :ghost,     disabled: true %>
+    <%= ui "button", icon: "arrow-up", disabled: true %>
+  <% end %>
+
+  <%= render "swatch",
+             title: "Loading",
+             description: "Spinner replaces the icon, label is held invisible to preserve width. Prevents layout shift on async submit and signals the click registered without flipping the user into a disabled state." do %>
+    <%= ui "button", label: "Saving…", loading: true %>
+    <%= ui "button", label: "Saving…", variant: :secondary, loading: true %>
+    <%= ui "button", label: "Saving…", variant: :ghost,     loading: true %>
+    <%= ui "button", icon: "arrow-up", loading: true %>
+  <% end %>
+
+  <%= render "swatch",
+             title: "As link (href:)",
+             description: "Pass `href:` and the same component renders an `<a>` with the matching styling. Use for navigation that looks like an action — external doc links, cancel-as-back-link, etc." do %>
+    <%= ui "button", label: "Open docs", href: "https://example.com" %>
+    <%= ui "button", label: "Cancel",    href: "#", variant: :secondary %>
+    <%= ui "button", icon: "external-link", href: "https://example.com", variant: :ghost %>
+  <% end %>
+</div>

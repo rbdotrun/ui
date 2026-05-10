@@ -1,0 +1,70 @@
+/* ─────────────────────────────────────────────────────────────────────
+ * rbrun_ui — Tailwind v4 source for the engine's compiled CSS bundle.
+ *
+ * This file is the INPUT to `bin/rake rbrun_ui:tailwind_build`, which
+ * compiles it into `app/assets/stylesheets/rbrun_ui/tailwind.css`. The
+ * engine layout loads the COMPILED file via:
+ *
+ *     <%= stylesheet_link_tag "rbrun_ui/tailwind" %>
+ *
+ * Engine pages get the compiled CSS shipped in the gem. Host CSS does
+ * not influence engine pages — that isolation is by design (the
+ * showcase shows the gem's reference look, never a host-customized one).
+ *
+ * For HOST pages that use components via `<%= ui("button", …) %>`:
+ * the host's Tailwind compile needs the gem's component directory in
+ * its `@source` so utility classes the components emit (`bg-stone-900`,
+ * `border-border`, etc.) get included in the host's bundle. Document
+ * the host integration in README; the engine itself does not modify
+ * the host's CSS.
+ *
+ * Override design tokens on HOST pages by redeclaring `@theme` in the
+ * host's tailwind input AFTER `@source`-ing the gem. `bg-primary`,
+ * `border-border`, `font-sans`, etc. resolve to the host's values
+ * because Tailwind v4 rebuilds utilities from the latest `@theme`
+ * declaration in the input. ENGINE pages stay on the gem's defaults.
+ * ─────────────────────────────────────────────────────────────────────
+ */
+@import "tailwindcss";
+
+/* Tell Tailwind to scan our component files for utility classes. The
+ * engine's CSS is compiled standalone, so this `@source` makes the
+ * compile aware of every utility class emitted by every component
+ * template / `style do` block. */
+@source "../../../../app/components/rbrun_ui";
+
+@theme {
+  /* Colors — semantic names. Override in the host's @theme to retheme
+   * components on host pages; engine pages always render on these. */
+  --color-primary:   #1c1917; /* rgb(28, 25, 23) — primary ink */
+  --color-secondary: #f1f0ee; /* rgb(241, 240, 238) — warm off-white */
+  --color-border:    #dbdad7; /* rgb(219, 218, 215) — warm gray border */
+
+  /* Fonts — IBM Plex. The engine layout loads IBM Plex from Google
+   * Fonts via <link>; host pages need to load the same fonts (or
+   * override `--font-sans` / `--font-mono` to match their stack). */
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+/* Restore v3-style default border color so a bare `<div class="border">`
+ * picks up our warm gray automatically. v4 reset border to `currentColor`,
+ * which would inherit text color and look wrong on every card. */
+@layer base {
+  *, ::before, ::after {
+    border-color: var(--color-border);
+  }
+}
+
+@layer components {
+  .ui-focus-ring {
+    @apply outline-none focus:outline-none;
+  }
+
+  .ui-focus-ring:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+}

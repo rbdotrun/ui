@@ -1,0 +1,77 @@
+<%# RbrunUi::Ui::Menu swatches — keyboard-navigable item list. Standalone in
+    the first swatch, then composed inside RbrunUi::Ui::Popover for the real
+    "dropdown menu" pattern. %>
+<div class="mt-4 grid gap-4">
+  <%= render "swatch",
+             title: "Standalone menu — link items",
+             description: "The menu primitive on its own — useful inside cards, sidebars, or anywhere you need a vertical list of actions without an anchored popover. Items are keyboard-navigable (↑/↓ to move, Enter to activate)." do %>
+    <div class="rounded-md border border-border bg-white shadow-sm">
+      <%= ui("menu") do |m| %>
+        <% m.link "Profile",  href: "#", icon: "user" %>
+        <% m.link "Settings", href: "#", icon: "settings" %>
+        <% m.link "Help",     href: "#", icon: "help-circle" %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%= render "swatch",
+             title: "Mixed items — header, links, separator, destructive button",
+             description: "The full menu vocabulary in one block. `header` for non-interactive context, `link` for navigation, `separator` to group, `button` for destructive or POST-like actions (with optional `confirm:` and `method:`)." do %>
+    <div class="rounded-md border border-border bg-white shadow-sm">
+      <%= ui("menu") do |m| %>
+        <% m.header    "Signed in as Ben" %>
+        <% m.link      "Profile",    href: "#", icon: "user" %>
+        <% m.link      "Workspaces", href: "#", icon: "layers" %>
+        <% m.separator %>
+        <% m.button    "Sign out",   href: "#", method: :delete, icon: "log-out", confirm: "Sign out?" %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%= render "swatch",
+             title: "Dropdown — Popover wrapping a Menu",
+             description: "The canonical dropdown-menu pattern. Popover anchors and positions the menu against a trigger; menu owns the items and keyboard handling. This is what you reach for 90% of the time." do %>
+    <%= ui("popover", placement: :bottom_start) do |p| %>
+      <% p.with_trigger { ui("button", label: "Account", icon: "user", variant: :secondary) } %>
+      <% p.with_body do %>
+        <%= ui("menu") do |m| %>
+          <% m.header    "Signed in as Ben" %>
+          <% m.link      "Profile",  href: "#", icon: "user" %>
+          <% m.link      "Settings", href: "#", icon: "settings" %>
+          <% m.separator %>
+          <% m.button    "Sign out", href: "#", method: :delete, icon: "log-out" %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <%= ui("popover", placement: :bottom_end) do |p| %>
+      <% p.with_trigger { ui("button", icon: "more-horizontal", variant: :ghost) } %>
+      <% p.with_body do %>
+        <%= ui("menu") do |m| %>
+          <% m.link      "Edit",      href: "#", icon: "pencil" %>
+          <% m.link      "Duplicate", href: "#", icon: "copy" %>
+          <% m.separator %>
+          <% m.button    "Delete",    href: "#", method: :delete, icon: "trash-2", confirm: "Delete this item?" %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= render "swatch",
+             title: "Searchable menu + fixed footer action",
+             description: "Pass `searchable: true` to add a filter input at the top; pass `footer_action:` to pin a sticky CTA at the bottom (commonly an \"Invite\" or \"Add new\" link that opens a flow). Use when the list grows past ~7 items." do %>
+    <%= ui("popover", placement: :bottom_start) do |p| %>
+      <% p.with_trigger { ui("button", label: "Members", icon: "users", variant: :secondary) } %>
+      <% p.with_body do %>
+        <%= ui("menu",
+                      searchable: true,
+                      footer_action: { label: "Invite teammate", href: "#" }) do |m| %>
+          <% m.link "Alice Johnson", href: "#", icon: "user" %>
+          <% m.link "Bob Chen",      href: "#", icon: "user" %>
+          <% m.link "Claire Dubois", href: "#", icon: "user" %>
+          <% m.link "Drew Patel",    href: "#", icon: "user" %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

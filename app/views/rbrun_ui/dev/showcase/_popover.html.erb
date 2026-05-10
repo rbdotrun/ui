@@ -1,0 +1,47 @@
+<%# RbrunUi::Ui::Popover swatches — anchored floater, controller-owned visibility +
+    Floating UI positioning. Each example shows the popover trigger
+    and (when opened) its content panel. %>
+<div class="mt-4 grid gap-4">
+  <%= render "swatch",
+             title: "Default (bottom_start, content panel)",
+             description: "The base popover: a `with_trigger` slot anchors the floater, `with_body` renders the panel. Default placement is `bottom_start` (left-aligned under the trigger), with outside-click and Esc dismissal handled by the controller." do %>
+    <%= ui("popover") do |p| %>
+      <% p.with_trigger { ui("button", label: "Open popover") } %>
+      <% p.with_body do %>
+        <div class="p-3 max-w-xs text-sm">
+          <p class="font-medium text-stone-900">Anchored content</p>
+          <p class="mt-1 text-stone-600">
+            Floating UI positioning, outside-click dismiss,
+            and Esc-to-close.
+          </p>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= render "swatch",
+             title: "Placements",
+             description: "Twelve placements available (`top`/`bottom`/`left`/`right` × `start`/`center`/`end`). Floating UI flips and shifts when the chosen placement would clip the viewport — pick the placement that reads best in the common case, the runtime handles the edges." do %>
+    <%= ui("popover", placement: :top) do |p| %>
+      <% p.with_trigger { ui("button", label: "Top", variant: :secondary) } %>
+      <% p.with_body { tag.div("Above the trigger.", class: "p-3 text-sm") } %>
+    <% end %>
+    <%= ui("popover", placement: :bottom_end) do |p| %>
+      <% p.with_trigger { ui("button", label: "Bottom end", variant: :secondary) } %>
+      <% p.with_body { tag.div("Right-aligned to trigger.", class: "p-3 text-sm") } %>
+    <% end %>
+    <%= ui("popover", placement: :right_start) do |p| %>
+      <% p.with_trigger { ui("button", label: "Right start", variant: :secondary) } %>
+      <% p.with_body { tag.div("Beside the trigger.", class: "p-3 text-sm") } %>
+    <% end %>
+  <% end %>
+
+  <%= render "swatch",
+             title: "Custom offset",
+             description: "`offset:` (in pixels) controls the gap between the trigger and the panel. Default is 8px — bump it when the panel needs to breathe (long tooltips, multi-step popovers) or shrink it for tight toolbars." do %>
+    <%= ui("popover", offset: 16) do |p| %>
+      <% p.with_trigger { ui("button", label: "16px gap", variant: :ghost) } %>
+      <% p.with_body { tag.div("Wider gap from the trigger.", class: "p-3 text-sm") } %>
+    <% end %>
+  <% end %>
+</div>

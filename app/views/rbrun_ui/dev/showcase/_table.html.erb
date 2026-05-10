@@ -1,0 +1,138 @@
+<% sample_rows = [
+  { id: "35178780", kind: "documentation", title: "Try to hack the HEX alarm, maybe it will connect the optical pixel!", status: "in_progress", priority: "medium", selected: false },
+  { id: "44061884", kind: "documentation", title: "I'll hack the haptic SSL program, that should bus the UDP transmitter!", status: "canceled", priority: "low", selected: false },
+  { id: "65377013", kind: "feature", title: "Use the cross-platform XML application, then you can quantify the solid state feed!", status: "todo", priority: "high", selected: false },
+  { id: "84220193", kind: "bug", title: "Programming the capacitor won't do anything, we need to bypass the neural IB hard drive!", status: "backlog", priority: "high", selected: false },
+  { id: "95081918", kind: "documentation", title: "Synthesizing the system won't do anything, we need to navigate the multi-byte HDD firewall!", status: "todo", priority: "medium", selected: false }
+] %>
+
+<% checkbox_classes = "h-4 w-4 rounded border border-border text-stone-900 accent-stone-900" %>
+
+<% badge_tone = lambda do |kind|
+  case kind
+  when "bug" then :red
+  when "feature" then :sky
+  when "documentation" then :amber
+  else :neutral
+  end
+end %>
+
+<% tone_classes = lambda do |kind, family|
+  case family
+  when :status
+    {
+      "backlog" => "text-stone-500",
+      "todo" => "text-stone-600",
+      "in_progress" => "text-amber-700",
+      "done" => "text-emerald-700",
+      "canceled" => "text-rose-700"
+    }.fetch(kind, "text-stone-600")
+  when :priority
+    {
+      "low" => "text-stone-500",
+      "medium" => "text-amber-700",
+      "high" => "text-rose-700"
+    }.fetch(kind, "text-stone-600")
+  end
+end %>
+
+<% icon_name = lambda do |kind, family|
+  case family
+  when :status
+    {
+      "backlog" => "circle-help",
+      "todo" => "circle",
+      "in_progress" => "timer",
+      "done" => "check-check",
+      "canceled" => "circle-off"
+    }.fetch(kind, "circle")
+  when :priority
+    {
+      "low" => "arrow-down",
+      "medium" => "arrow-right",
+      "high" => "arrow-up"
+    }.fetch(kind, "arrow-right")
+  end
+end %>
+
+<div class="mt-4 grid gap-4">
+  <%= render "swatch",
+             title: "Composed tasks table",
+             description: "End-to-end demonstration of the table primitive composed with every adjacent component: filter bar with search and faceted selects, sortable column headers, row-level select-all and per-row checkboxes, badge + status icon cells, a per-row popover-with-menu for actions, batch action footer, and pagination. This is the shape every real list view in the app should mirror." do %>
+    <%= ui("table") do |table| %>
+      <% table.filters do %>
+        <%= ui("filter",
+                      search_placeholder: "Filter tasks...",
+                      action_label: "Search",
+                      interactive: true,
+                      selects: [
+                        { name: "tasks[status]", placeholder: "Status", options: %w[backlog todo in_progress done canceled], trigger_class_name: "min-w-28" },
+                        { name: "tasks[priority]", placeholder: "Priority", options: %w[low medium high], trigger_class_name: "min-w-28" }
+                      ]) %>
+      <% end %>
+
+      <% table.header do |header| %>
+        <% header.cell(class_name: "w-12") do %>
+          <%= table.select_all_checkbox %>
+        <% end %>
+        <% header.cell(label: "Task") %>
+        <% header.cell(label: "Title", sortable: true) %>
+        <% header.cell(label: "Status", sortable: true) %>
+        <% header.cell(label: "Priority", sortable: true) %>
+        <% header.cell(class_name: "w-14") %>
+      <% end %>
+
+      <% sample_rows.each do |task| %>
+        <% table.row do |row| %>
+          <% row.cell do %>
+            <%= table.row_checkbox(value: task[:id], checked: task[:selected]) %>
+          <% end %>
+          <% row.cell(class_name: "whitespace-nowrap font-medium text-stone-500") { task[:id] } %>
+          <% row.cell(class_name: "min-w-[28rem]") do %>
+            <div class="flex items-center gap-3">
+              <%= ui("badge", label: task[:kind], tone: badge_tone.call(task[:kind]), class_name: "py-1 px-3") %>
+              <span class="block max-w-[28rem] truncate text-stone-900"><%= task[:title] %></span>
+            </div>
+          <% end %>
+          <% row.cell(class_name: "whitespace-nowrap") do %>
+            <div class="flex items-center gap-2 <%= tone_classes.call(task[:status], :status) %>">
+              <%= lucide_icon(icon_name.call(task[:status], :status), class: "h-4 w-4") %>
+              <span><%= task[:status].humanize %></span>
+            </div>
+          <% end %>
+          <% row.cell(class_name: "whitespace-nowrap") do %>
+            <div class="flex items-center gap-2 <%= tone_classes.call(task[:priority], :priority) %>">
+              <%= lucide_icon(icon_name.call(task[:priority], :priority), class: "h-4 w-4") %>
+              <span><%= task[:priority].humanize %></span>
+            </div>
+          <% end %>
+          <% row.cell(class_name: "whitespace-nowrap text-right") do %>
+            <%= ui("popover", placement: :bottom_end) do |popover| %>
+              <% popover.with_trigger do %>
+                <button type="button" class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-border bg-white text-stone-700 hover:bg-secondary ui-focus-ring">
+                  <%= lucide_icon("ellipsis", class: "h-4 w-4") %>
+                  <span class="sr-only">Open menu</span>
+                </button>
+              <% end %>
+              <% popover.with_body do %>
+                <%= ui("menu") do |menu| %>
+                  <% menu.link "Open task", href: "#", icon: "external-link" %>
+                  <% menu.link "Edit", href: "#", icon: "pencil" %>
+                  <% menu.separator %>
+                  <% menu.button "Archive", href: "#", method: :post, icon: "archive" %>
+                <% end %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <% table.batch do %>
+        <%= ui("button", label: "Archive", variant: :secondary, size: :sm) %>
+        <%= ui("button", label: "Delete", variant: :ghost, size: :sm) %>
+      <% end %>
+
+      <% table.paginate(sample_rows, total_count: 100, rows_per_page: 10, page: 1, page_count: 10, interactive: false) %>
+    <% end %>
+  <% end %>
+</div>

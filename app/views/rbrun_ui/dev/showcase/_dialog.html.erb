@@ -1,0 +1,37 @@
+<div class="mt-4 grid gap-4">
+  <%= render "swatch",
+             title: "Inline trigger + card preset",
+             description: "Modal dialog backed by the native `<dialog>` element. The component renders both the trigger button and the panel inline, wires Esc-to-close and outside-click dismiss, and slots a card-preset header/body/footer inside." do %>
+    <%= ui("dialog", trigger_label: "Open settings dialog") do |dialog| %>
+      <% dialog.with_header do |header| %>
+        <% header.with_left do %>
+          <%= ui("item",
+                        title: "Workspace settings",
+                        subtitle: "Manage name, access, and defaults",
+                        icon: "settings",
+                        size: :md,
+                        title_emphasis: :strong) %>
+        <% end %>
+        <% header.with_right do %>
+          <%= ui("button", icon: "x", variant: :ghost, size: :sm, data: ui_dialog_close) %>
+        <% end %>
+      <% end %>
+
+      <% dialog.with_footer do |footer| %>
+        <% footer.with_left { tag.span("Changes apply immediately", class: "text-xs text-stone-500") } %>
+        <% footer.with_right do %>
+          <div class="flex items-center gap-2">
+            <%= ui("button", label: "Cancel", variant: :secondary, size: :sm, data: ui_dialog_close) %>
+            <%= ui("button", label: "Save changes", size: :sm) %>
+          </div>
+        <% end %>
+      <% end %>
+
+      <div class="space-y-4 text-sm text-stone-600">
+        <p>This dialog uses the card preset over the area primitive.</p>
+        <p>The body is the only scrollable region. Header and footer stay pinned.</p>
+        <p>Call sites must define height through the dialog panel preset.</p>
+      </div>
+    <% end %>
+  <% end %>
+</div>

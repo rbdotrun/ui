@@ -1,0 +1,15 @@
+/.bundle/
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+/test/dummy/log/*
+/test/dummy/tmp/*
+/test/dummy/storage/*
+!/test/dummy/log/.keep
+!/test/dummy/tmp/.keep
+/test/dummy/db/*.sqlite3
+/test/dummy/db/*.sqlite3-*
+/pkg/
+*.gem
+.byebug_history

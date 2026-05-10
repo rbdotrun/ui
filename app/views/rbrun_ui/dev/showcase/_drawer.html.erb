@@ -1,0 +1,34 @@
+<div class="mt-4 grid gap-4">
+  <%= render "swatch",
+             title: "Inline trigger + right-side panel",
+             description: "Slide-in side panel for secondary content (activity feeds, contextual detail, multi-step flows). Same dismissal contract as dialog (Esc, outside-click, explicit close button) but enters from the right and preserves the page underneath." do %>
+    <%= ui("drawer", trigger_label: "Open activity drawer") do |drawer| %>
+      <% drawer.with_header do |header| %>
+        <% header.with_left do %>
+          <%= ui("item",
+                        title: "Activity feed",
+                        subtitle: "Recent project events",
+                        icon: "panel-right-open",
+                        size: :md,
+                        title_emphasis: :strong) %>
+        <% end %>
+        <% header.with_right do %>
+          <%= ui("button", icon: "x", variant: :ghost, size: :sm, data: ui_drawer_close) %>
+        <% end %>
+      <% end %>
+
+      <% drawer.with_footer do |footer| %>
+        <% footer.with_left { tag.span("Synced just now", class: "text-xs text-stone-500") } %>
+        <% footer.with_right { ui("button", label: "Done", size: :sm, data: ui_drawer_close) } %>
+      <% end %>
+
+      <div class="space-y-3 text-sm text-stone-600">
+        <% 8.times do |index| %>
+          <div class="rounded-lg border border-stone-200 p-3">
+            Event <%= index + 1 %>: a new deployment completed and the workspace state was updated.
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+</div>

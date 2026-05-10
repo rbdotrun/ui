@@ -1,0 +1,10 @@
+<div class="mt-4 grid gap-4">
+  <%= render "swatch",
+             title: "Tone variants",
+             description: "Compact pill labels for taxonomy and status. Tone maps to a fixed bg + text colour pair pulled from the stone/amber/sky/red/emerald scales — pick by semantic meaning, not by aesthetic preference." do %>
+    <%= ui("badge", label: "Documentation", tone: :amber) %>
+    <%= ui("badge", label: "Feature", tone: :sky) %>
+    <%= ui("badge", label: "Bug", tone: :red) %>
+    <%= ui("badge", label: "Neutral", tone: :neutral) %>
+  <% end %>
+</div>

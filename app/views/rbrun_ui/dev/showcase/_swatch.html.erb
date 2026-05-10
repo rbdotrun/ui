@@ -1,0 +1,30 @@
+<%# A labelled swatch. Title (and optional description) sit above a %>
+<%# white card containing the live demo. The block's literal ERB %>
+<%# source is auto-extracted from the calling partial via %>
+<%# `swatch_source_for_caller` and rendered underneath in a code panel. %>
+<%# Single source of truth: the markup in the call site is the markup %>
+<%# you see, both rendered and quoted. %>
+<section class="grid gap-3">
+  <header class="grid gap-1">
+    <h3 class="text-base font-semibold text-stone-900"><%= title %></h3>
+    <% if local_assigns[:description].present? %>
+      <p class="text-sm leading-relaxed text-stone-500">
+        <%= description %>
+      </p>
+    <% end %>
+  </header>
+
+  <article class="overflow-hidden rounded-xl border border-stone-200 bg-white">
+    <div class="p-4">
+      <div class="flex flex-wrap items-center gap-3">
+        <%= yield %>
+      </div>
+    </div>
+
+    <% if (source = swatch_source_for_caller).present? %>
+      <div class="border-t border-stone-200 bg-stone-50 p-4">
+        <%= ui("code", code: source) %>
+      </div>
+    <% end %>
+  </article>
+</section>

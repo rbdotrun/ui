@@ -1,0 +1,72 @@
+<div class="mt-4 grid gap-4">
+  <%= render "swatch",
+             title: "Size variants",
+             description: "The base building block for any title-plus-subtitle row: menu options, list items, header content, drawer/dialog titles. The three sizes match the surrounding density — sm in dropdowns, md in lists, lg in panel headers." do %>
+    <div class="grid gap-3">
+      <%= ui("item", title: "Small item", subtitle: "Compact supporting text", size: :sm) %>
+      <%= ui("item", title: "Medium item", subtitle: "Default supporting text", size: :md) %>
+      <%= ui("item", title: "Large item", subtitle: "Roomier supporting text", size: :lg) %>
+    </div>
+  <% end %>
+
+  <%= render "swatch",
+             title: "Avatar initials / text fallback",
+             description: "Pass `avatar:` to slot the avatar component on the leading edge. The hash is forwarded as-is, so anything the avatar accepts (`name:`, `initials:`, `src:`, …) works here without re-plumbing." do %>
+    <div class="max-w-sm grid gap-3">
+      <%= ui("item",
+                    title: "Alice Johnson",
+                    subtitle: "alice@example.com",
+                    avatar: { name: "Alice Johnson" },
+                    size: :md) %>
+      <%= ui("item",
+                    title: "Acme Workspace",
+                    subtitle: "Production environment",
+                    avatar: { name: "Acme Workspace", initials: "AW" },
+                    size: :lg) %>
+    </div>
+  <% end %>
+
+  <%= render "swatch",
+             title: "Avatar image + icon leading",
+             description: "Mix and match leading affordances. `avatar: { src: … }` for real photographs, `icon: \"…\"` for a Lucide glyph in a tinted square. Pick avatar for entities (people, workspaces, organisations) and icon for categories or feature labels." do %>
+    <div class="grid gap-4 md:grid-cols-3">
+      <%= ui("item",
+                    title: "Docs Bot",
+                    subtitle: "Small avatar image",
+                    avatar: { name: "Docs Bot", src: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=128&h=128&fit=crop" },
+                    size: :sm) %>
+      <%= ui("item",
+                    title: "Product updates",
+                    subtitle: "Medium icon leading",
+                    icon: "sparkles",
+                    size: :md) %>
+      <%= ui("item",
+                    title: "Release notes",
+                    subtitle: "Large icon leading",
+                    icon: "file-text",
+                    size: :lg) %>
+    </div>
+  <% end %>
+
+  <%= render "swatch",
+             title: "Title emphasis",
+             description: "Three weights for the title line. `:auto` lets the surrounding context decide (default, suitable for menus and lists), `:soft` bumps the title above the subtitle without going bold, `:strong` is the panel/header weight when the item leads a section." do %>
+    <div class="max-w-sm grid gap-3">
+      <%= ui("item",
+                    title: "Light / regular title",
+                    subtitle: "Default primitive emphasis",
+                    title_emphasis: :auto,
+                    size: :md) %>
+      <%= ui("item",
+                    title: "Soft / medium title",
+                    subtitle: "Slightly stronger emphasis",
+                    title_emphasis: :soft,
+                    size: :md) %>
+      <%= ui("item",
+                    title: "Strong / bold title",
+                    subtitle: "Explicit strong emphasis",
+                    title_emphasis: :strong,
+                    size: :md) %>
+    </div>
+  <% end %>
+</div>

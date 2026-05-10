@@ -1,0 +1,41 @@
+<div class="mt-4 grid gap-4">
+  <%= render "swatch",
+             title: "Fixed header + scrollable body + fixed footer",
+             description: "The card primitive pins `header` and `footer` slots and lets the body scroll between them. Caller is responsible for height — give the card a bounded ancestor (`h-80` on the wrapper here) or it grows to fit its content." do %>
+    <div class="h-80 w-full max-w-xl">
+      <%= ui("card", class_name: "h-full") do |card| %>
+        <% card.with_header do %>
+          <%= ui("area_header") do |header| %>
+            <% header.with_left do %>
+              <%= ui("item",
+                            title: "Release notes",
+                            subtitle: "Version 2.4.0",
+                            icon: "file-text",
+                            size: :md,
+                            title_emphasis: :strong) %>
+            <% end %>
+            <% header.with_right do %>
+              <%= ui("button", label: "Share", variant: :ghost, size: :sm, icon: "share-2") %>
+            <% end %>
+          <% end %>
+        <% end %>
+
+        <% card.with_footer do %>
+          <%= ui("area_footer") do |footer| %>
+            <% footer.with_left { tag.span("Last updated 2h ago", class: "text-xs text-stone-500") } %>
+            <% footer.with_right { ui("button", label: "Close", variant: :secondary, size: :sm) } %>
+          <% end %>
+        <% end %>
+
+        <div class="space-y-4 text-sm text-stone-600">
+          <% 7.times do |index| %>
+            <p>
+              Patch note <%= index + 1 %> tightens interaction behavior, smooths positioning,
+              and keeps the content body scrollable inside the available height.
+            </p>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
