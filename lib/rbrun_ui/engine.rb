@@ -71,6 +71,17 @@ module RbrunUi
       RbrunUi.importmap.cache_sweeper(watches: root.join("app/javascript"))
       RbrunUi.importmap.cache_sweeper(watches: root.join("app/components"))
 
+      # Also merge the engine's pins into the HOST's importmap so engine
+      # components used on host pages (`ui("dialog")`, `ui("popover")`)
+      # have their Stimulus sidecars resolvable from the host's Stimulus
+      # app. Without this, `Rails.application.importmap` has zero
+      # rbrun_ui entries → sidecars never load → markup renders but
+      # `data-controller="rbrun-ui--dialog"` has no module to bind to →
+      # clicks are inert. Same trick aeno uses (see lib/aeno/engine.rb).
+      if app.config.respond_to?(:importmap)
+        app.config.importmap.paths << root.join("config/importmap.rb")
+      end
+
       ActiveSupport.on_load(:action_controller_base) do
         before_action { RbrunUi.importmap.cache_sweeper.execute_if_updated }
       end
