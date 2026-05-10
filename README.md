@@ -21,7 +21,16 @@ The host app needs:
 
 ## Installation
 
-Two lines, that's the entire integration.
+There are two scopes the gem supports:
+
+1. **Engine-mounted pages only** (you only want the showcase, or you'll
+   render components inside engine routes). **Two lines** — gem + mount.
+2. **Components on host pages too** (you want `ui("dialog")`,
+   `ui("popover")`, etc. on your own routes). **Two more lines** — load
+   the engine's precompiled CSS and register the engine's Stimulus
+   controllers against the host's Stimulus app.
+
+### 1 — Minimum (engine-mounted pages only)
 
 ```ruby
 # Gemfile
@@ -33,11 +42,69 @@ gem "rbrun_ui", git: "https://github.com/rbdotrun/ui.git"
 mount RbrunUi::Engine => "/_dev/rbrun_ui" if Rails.env.local?
 ```
 
-That's it. No install generator. No CSS edits. No JS imports. No importmap
-changes. No helper includes. The engine wires itself.
+After `bundle install`, hit `/_dev/rbrun_ui/showcase` — every component in
+every variant, rendered with the gem's own layout, own Stimulus app, own
+precompiled Tailwind bundle.
 
-After `bundle install`, hit `/_dev/rbrun_ui/showcase` to see every component
-in every variant.
+The engine's `lib/rbrun_ui/engine.rb` automatically:
+
+- Adds `app/javascript` and `app/components` to `config.assets.paths` so
+  Propshaft can serve sidecar `controller.js` files.
+- Auto-includes `RbrunUi::ApplicationHelper` into every host controller, so
+  the `ui(...)` helper is available in any view (engine or host).
+- Maintains a parallel `RbrunUi.importmap` for engine pages (isolated from
+  the host's `Rails.application.importmap` so version conflicts can't
+  happen) **AND** appends the engine's `config/importmap.rb` to the host's
+  `app.config.importmap.paths`, so the engine's pins
+  (`rbrun_ui/controllers/loader`, the per-component sidecars, the
+  `@floating-ui/*` CDN pins) are resolvable from host pages too.
+
+### 2 — Components on host pages
+
+If you want to render `ui(...)` components on your own routes (not just the
+engine's showcase), the host needs **two more wires**: the gem's
+precompiled Tailwind bundle in your layout, and the gem's Stimulus
+controllers registered against the host's Stimulus application.
+
+**a. Load the gem's precompiled CSS in your host layout** so utility classes
+the components emit (`fixed inset-0 z-50` for dialog, `data-[state=open]:…`
+arbitrary variants, etc.) are available without your host Tailwind compile
+having to scan the gem's templates:
+
+```erb
+<%# app/views/layouts/application.html.erb %>
+<%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+<%= stylesheet_link_tag "rbrun_ui/tailwind", "data-turbo-track": "reload" %>
+```
+
+The gem ships its own pre-built `app/assets/stylesheets/rbrun_ui/tailwind.css`
+so you do **not** need to add `@source` directives to your own
+`tailwind/application.css` and you do **not** need to know where the gem
+lives in `bundler/gems/`. Bundle update the gem and the precompiled bundle
+follows automatically.
+
+**b. Register the engine's Stimulus controllers against the host's Stimulus
+application** so `data-controller="rbrun-ui--dialog"` etc. actually wakes up
+on host pages:
+
+```js
+// app/javascript/controllers/index.js
+import { application } from "controllers/application"
+import { eagerLoadControllersFrom } from "@hotwired/stimulus-loading"
+import { eagerLoadEngineControllersFrom } from "rbrun_ui/controllers/loader"
+
+eagerLoadControllersFrom("controllers", application)
+eagerLoadEngineControllersFrom("rbrun_ui/components/ui", application)
+```
+
+The `under: "rbrun_ui/components/ui"` argument is what makes the loader
+derive identifiers like `rbrun-ui--dialog` (matching what the components
+emit via their `controller_name` method). No further importmap edits — the
+engine already merged its pins into the host's importmap (see step 1).
+
+**That's it.** Restart Rails so the engine initializer re-runs and the
+host's importmap picks up the gem pins. Click any `ui("dialog", ...)`
+trigger on a host page; it opens.
 
 ## Usage on host pages
 
@@ -73,31 +140,15 @@ render directly:
 <%= render RbrunUi::Ui::Button::Component.new(label: "Save") %>
 ```
 
-### Tailwind on host pages
+### Override design tokens (host pages)
 
-If you use components on host pages, the host's Tailwind compile needs to
-scan the gem's component templates so utility classes like `bg-secondary`,
-`border-border`, `font-sans` get included in the host's bundle. Add to the
-host's `app/assets/tailwind/application.css`:
-
-```css
-@import "tailwindcss";
-@source "../../../path/to/gem/app/components";
-```
-
-Find the path with `bundle info rbrun_ui` and use the `gem_dir` it prints.
-For local development with `path:` or a checked-out clone, point at that
-directory instead.
-
-### Override design tokens
-
-Engine pages always render with the gem's defaults (the showcase shows the
-reference look). To override tokens on **host** pages, redeclare them in the
-host's `@theme` block:
+Loading `rbrun_ui/tailwind` (step 2a above) gives the host the gem's
+default tokens — stone-based palette, IBM Plex Sans / Mono, etc. To
+override on **host** pages, redeclare tokens in your host
+`tailwind/application.css`:
 
 ```css
 @import "tailwindcss";
-@source "...";
 
 @theme {
   --color-primary:   #4338ca;  /* indigo */
@@ -107,10 +158,12 @@ host's `@theme` block:
 }
 ```
 
-Tailwind v4 rebuilds utility classes from the latest `@theme` declaration,
-so `bg-primary`, `border-border`, `font-sans`, etc. now resolve to the host's
-values on host pages. Engine pages stay on the gem defaults — that
-isolation is by design.
+Because your host bundle is loaded **after** `rbrun_ui/tailwind` in the
+layout (it's the last `stylesheet_link_tag`), your `@theme` redeclarations
+win cascade order: `bg-primary`, `border-border`, `font-sans`, etc. now
+resolve to your values on host pages. Engine-mounted pages still render
+with the gem's defaults — that isolation is by design (the showcase shows
+the reference look).
 
 ### IBM Plex font
 
