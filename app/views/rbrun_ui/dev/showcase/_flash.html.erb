@@ -1,0 +1,12 @@
+<div class="mt-4 grid gap-4">
+  <%= render "swatch",
+             title: "Toast stack",
+             description: "Bottom-right, Sonner-like delivery for redirect and Turbo feedback. Same component works from plain Rails flash and appended Turbo Stream messages." do %>
+    <div class="relative min-h-80 rounded-2xl border border-dashed border-border bg-secondary/60 p-4">
+      <div class="pointer-events-none absolute bottom-4 right-4 flex w-[min(22rem,calc(100%-2rem))] flex-col gap-3">
+        <%= ui "flash", message: "Please sign in to continue.", variant: :alert %>
+        <%= ui "flash", message: "Repository imported successfully.", variant: :notice, duration: 7000 %>
+      </div>
+    </div>
+  <% end %>
+</div>

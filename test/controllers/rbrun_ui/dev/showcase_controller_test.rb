@@ -23,7 +23,7 @@ class RbrunUi::Dev::ShowcaseControllerTest < ActionDispatch::IntegrationTest
 
     body = @response.body
 
-    %w[Button Avatar Badge Item Popover Menu Select Card Table Dialog Drawer].each do |section|
+    %w[Button Avatar Badge Alert Flash Item Popover Menu Select Card Table Dialog Drawer].each do |section|
       assert_includes body, ">#{section}</h2>",
                       "expected showcase index to render an <h2> for #{section}"
     end
