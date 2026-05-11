@@ -56,7 +56,16 @@ module RbrunUi
     end
 
     initializer "rbrun_ui.helpers" do
-      ActiveSupport.on_load(:action_controller) do
+      # Hook MUST be `:action_controller_base`, not `:action_controller`.
+      # The bare `:action_controller` symbol fires for BOTH
+      # `ActionController::Base` and `ActionController::API`, but
+      # `helper` is only defined on Base. With the bare symbol, any
+      # host-app or sibling-engine controller that inherits from
+      # `ActionController::API` blows up at load time with
+      # `NoMethodError: undefined method 'helper' for class ActionController::API`.
+      # The cache_sweeper hook a few lines below already uses
+      # `:action_controller_base` correctly — same pattern here.
+      ActiveSupport.on_load(:action_controller_base) do
         helper RbrunUi::ApplicationHelper
       end
     end
