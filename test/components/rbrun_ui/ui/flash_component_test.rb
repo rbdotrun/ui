@@ -9,8 +9,19 @@ class RbrunUi::Ui::Flash::ComponentTest < ViewComponent::TestCase
 
     assert_text "Action needed"
     assert_text "Please sign in to continue."
-    assert_selector %(article[data-controller="rbrun-ui--flash"][data-state="closed"])
+    assert_selector %(article[data-controller="rbrun-ui--flash"][data-state="closed"][data-rbrun-ui--flash-duration-value="4200"])
     assert_selector %(button[aria-label="Dismiss notification"])
     assert_selector %(section.border-rose-200)
+  end
+
+  test "renders a custom duration when provided" do
+    render_inline(RbrunUi::Ui::Flash::Component.new(
+      message: "Repository imported successfully.",
+      variant: :notice,
+      duration: 7000
+    ))
+
+    assert_selector %(article[data-rbrun-ui--flash-duration-value="7000"])
+    assert_text "Repository imported successfully."
   end
 end

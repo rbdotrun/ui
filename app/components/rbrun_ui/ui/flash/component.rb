@@ -1,8 +1,10 @@
 class RbrunUi::Ui::Flash::Component < RbrunUi::ApplicationViewComponent
+  DEFAULT_DURATION = 4_200
+
   option(:title,        optional: true)
   option(:message)
   option(:variant,      default: proc { :info })
-  option(:duration,     default: proc { 4200 })
+  option(:duration,     default: proc { DEFAULT_DURATION })
   option(:dismissible,  default: proc { true })
   option(:class_name,   optional: true)
 
@@ -46,9 +48,13 @@ class RbrunUi::Ui::Flash::Component < RbrunUi::ApplicationViewComponent
     TailwindMerge::Merger.new.merge([style, class_name].compact.join(" "))
   end
 
+  def resolved_duration
+    duration || DEFAULT_DURATION
+  end
+
   def data_attributes
     stimulus_controller
-      .merge(stimulus_value(:duration, duration))
+      .merge(stimulus_value(:duration, resolved_duration))
       .merge(action: [
         "mouseenter->#{controller_name}#pause",
         "mouseleave->#{controller_name}#resume",
@@ -62,7 +68,7 @@ class RbrunUi::Ui::Flash::Component < RbrunUi::ApplicationViewComponent
              role="<%= resolved_variant == :danger ? 'alert' : 'status' %>"
              aria-live="<%= resolved_variant == :danger ? 'assertive' : 'polite' %>"
              data-controller="<%= data_attributes[:controller] %>"
-             data-<%= controller_name %>-duration-value="<%= duration %>"
+             data-<%= controller_name %>-duration-value="<%= resolved_duration %>"
              data-action="<%= data_attributes[:action] %>">
       <div class="relative">
         <%= render RbrunUi::Ui::Alert::Component.new(
