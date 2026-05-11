@@ -1,0 +1,12 @@
+<div class="mt-4 grid gap-4">
+  <%= render "swatch",
+             title: "Variants",
+             description: "Static feedback blocks for inline surfaces. Keep the copy short, lead with the action or state change, and let color do the secondary work." do %>
+    <div class="grid gap-3">
+      <%= ui "alert", title: "Notice", message: "A private page redirects guests back to sign in.", variant: :info %>
+      <%= ui "alert", title: "Saved", message: "Workspace settings were updated.", variant: :success %>
+      <%= ui "alert", title: "Check this first", message: "GitHub App credentials are missing in this environment.", variant: :warning %>
+      <%= ui "alert", title: "Sign-in required", message: "Please sign in to continue.", variant: :danger %>
+    </div>
+  <% end %>
+</div>
