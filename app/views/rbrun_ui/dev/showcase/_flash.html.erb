@@ -1,12 +1,15 @@
 <div class="mt-4 grid gap-4">
   <%= render "swatch",
-             title: "Toast stack",
-             description: "Bottom-right, Sonner-like delivery for redirect and Turbo feedback. Default auto-dismiss is 4.2 seconds; pass `duration:` to keep a toast around longer." do %>
-    <div class="relative min-h-80 rounded-2xl border border-dashed border-border bg-secondary/60 p-4">
-      <div class="pointer-events-none absolute bottom-4 right-4 flex w-[min(22rem,calc(100%-2rem))] flex-col gap-3">
-        <%= ui "flash", message: "Please sign in to continue.", variant: :alert %>
-        <%= ui "flash", message: "Repository imported successfully.", variant: :notice, duration: 7000 %>
-      </div>
+             title: "Toast demos",
+             description: "Two implementation paths. The first sets a plain redirect flash. The second enqueues a background job that broadcasts into the page's toast tray. Default auto-dismiss is 4.2 seconds; pass `duration:` to keep a toast around longer." do %>
+    <div class="flex flex-wrap items-center gap-3">
+      <%= form_with url: flash_demo_vanilla_path, method: :post, class: "contents", data: { turbo: false } do %>
+        <%= ui "button", label: "Vanilla flash", type: "submit" %>
+      <% end %>
+
+      <%= form_with url: flash_demo_async_path, method: :post, class: "contents", data: { turbo: false } do %>
+        <%= ui "button", label: "Background job flash", variant: :secondary, type: "submit" %>
+      <% end %>
     </div>
   <% end %>
 </div>

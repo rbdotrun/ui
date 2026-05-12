@@ -38,6 +38,7 @@
     <%= javascript_importmap_tags "rbrun_ui/application", importmap: RbrunUi.importmap %>
   </head>
   <body class="font-sans antialiased text-stone-900">
+    <%= render "rbrun_ui/shared/flash_stack", include_demo_stream: content_for?(:flash_demo_stream) %>
     <%= yield %>
   </body>
 </html>

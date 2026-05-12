@@ -13,4 +13,6 @@ RbrunUi::Engine.routes.draw do
   # lookup. So `dev/showcase#index` → `RbrunUi::Dev::ShowcaseController#index`.
   get "/showcase",            to: "dev/showcase#index", as: :showcase
   get "/showcase/:component", to: "dev/showcase#show",  as: :showcase_component
+  post "/showcase/flash-demo/vanilla", to: "dev/flash_demos#create_vanilla", as: :flash_demo_vanilla
+  post "/showcase/flash-demo/async",   to: "dev/flash_demos#create_async",   as: :flash_demo_async
 end

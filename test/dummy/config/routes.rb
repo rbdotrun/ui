@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  mount ActionCable.server => "/cable"
+
   # Mount the engine — the showcase route lives behind here. The
   # component tests don't actually need the route table; they invoke
   # ViewComponents directly via render_inline. But mounting keeps the

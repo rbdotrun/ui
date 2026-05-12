@@ -45,5 +45,14 @@ module RbrunUi
     def ui_popover_close
       { action: "click->rbrun-ui--popover#close" }
     end
+
+    def flash_component_variant(type)
+      case type.to_sym
+      when :notice, :success then :notice
+      when :alert, :error    then :alert
+      when :warning          then :warning
+      else :info
+      end
+    end
   end
 end

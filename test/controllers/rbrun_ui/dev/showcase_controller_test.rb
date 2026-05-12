@@ -16,6 +16,8 @@ require "test_helper"
 #     non-trivial subset of the component graph, so a missing autoload
 #     or constant typo anywhere surfaces as a 500 here.
 class RbrunUi::Dev::ShowcaseControllerTest < ActionDispatch::IntegrationTest
+  include ActiveJob::TestHelper
+
   test "GET /_dev/showcase renders 200 and includes every component section" do
     get "/_dev/showcase"
 
@@ -27,6 +29,9 @@ class RbrunUi::Dev::ShowcaseControllerTest < ActionDispatch::IntegrationTest
       assert_includes body, ">#{section}</h2>",
                       "expected showcase index to render an <h2> for #{section}"
     end
+
+    assert_includes body, "Vanilla flash"
+    assert_includes body, "Background job flash"
   end
 
   test "GET /_dev/showcase/:component renders the same index" do
@@ -36,5 +41,23 @@ class RbrunUi::Dev::ShowcaseControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :ok
     assert_includes @response.body, "Component showcase"
+  end
+
+  test "POST /_dev/showcase/flash-demo/vanilla redirects back with flash" do
+    post "/_dev/showcase/flash-demo/vanilla"
+
+    assert_redirected_to "/_dev/showcase/flash"
+    follow_redirect!
+    assert_response :ok
+    assert_includes @response.body, "Signed in successfully."
+    assert_includes @response.body, 'data-controller="rbrun-ui--flash"'
+  end
+
+  test "POST /_dev/showcase/flash-demo/async enqueues a broadcast job" do
+    assert_enqueued_with(job: RbrunUi::Dev::FlashDemoJob) do
+      post "/_dev/showcase/flash-demo/async"
+    end
+
+    assert_redirected_to "/_dev/showcase/flash"
   end
 end

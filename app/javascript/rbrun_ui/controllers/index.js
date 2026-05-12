@@ -10,4 +10,4 @@
 import { application } from "rbrun_ui/controllers/application"
 import { eagerLoadEngineControllersFrom } from "rbrun_ui/controllers/loader"
 
-eagerLoadEngineControllersFrom("rbrun_ui/components", application)
+eagerLoadEngineControllersFrom("rbrun_ui/components/ui", application)

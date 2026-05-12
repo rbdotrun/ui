@@ -2,6 +2,8 @@ ENV["RAILS_ENV"] ||= "test"
 
 require_relative "dummy/config/environment"
 require "rails/test_help"
+require "active_job/test_helper"
+require "action_dispatch/system_test_case"
 
 # ViewComponent test base class — gives us `render_inline` + Capybara
 # matchers (`assert_selector`, `assert_text`, …).

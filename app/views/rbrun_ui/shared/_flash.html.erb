@@ -1,0 +1,7 @@
+<% return if message.blank? %>
+
+<%= ui("flash",
+       message:,
+       title: local_assigns[:title],
+       duration: local_assigns.fetch(:duration, RbrunUi::Ui::Flash::Component::DEFAULT_DURATION),
+       variant: flash_component_variant(type)) %>

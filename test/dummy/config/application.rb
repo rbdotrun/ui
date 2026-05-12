@@ -6,7 +6,9 @@ require "rails"
 # keeps boot fast for the component test suite — they're not required
 # to render a ViewComponent or assert against the rendered HTML.
 require "active_record/railtie"
+require "active_job/railtie"
 require "action_controller/railtie"
+require "action_cable/engine"
 require "action_view/railtie"
 require "rails/test_unit/railtie"
 
@@ -27,6 +29,7 @@ module Dummy
     config.eager_load = false
     config.consider_all_requests_local = true
     config.action_controller.perform_caching = false
+    config.active_job.queue_adapter = Rails.env.test? ? :test : :async
 
     # Quiet boot — the test suite renders ViewComponents and doesn't
     # care about logger output.
