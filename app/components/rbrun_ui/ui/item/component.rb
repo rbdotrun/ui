@@ -45,7 +45,7 @@ class RbrunUi::Ui::Item::Component < RbrunUi::ApplicationViewComponent
   style do
     base do
       %w[
-        flex w-full items-center rounded-md text-left
+        flex w-full cursor-pointer items-center rounded-md text-left
         text-stone-900
       ]
     end

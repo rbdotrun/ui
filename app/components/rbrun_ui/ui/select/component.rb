@@ -30,6 +30,7 @@ class RbrunUi::Ui::Select::Component < RbrunUi::ApplicationViewComponent
   option(:search_placeholder, default: proc { "Search…" })
   option(:footer_action,      optional: true)
   option(:multiple,           default: proc { false })
+  option(:with_checkbox,      default: proc { false })
   option(:disabled,           default: proc { false })
   option(:trigger_class_name, optional: true)
 
@@ -189,6 +190,10 @@ class RbrunUi::Ui::Select::Component < RbrunUi::ApplicationViewComponent
     }
   end
 
+  def selected_option_class
+    with_checkbox ? "bg-stone-100/60 text-stone-900" : "bg-stone-200/70 text-stone-950"
+  end
+
   # Indicator icon's data attribute. Built in Ruby so the
   # `controller_name` interpolation happens at render time, not at
   # heredoc-creation time when the class body loads.
@@ -238,19 +243,30 @@ class RbrunUi::Ui::Select::Component < RbrunUi::ApplicationViewComponent
             <% group[:options].each do |label, option_value| %>
               <% option_selected = selected?(option_value) %>
               <% menu_group.with_item do %>
-                <%= render RbrunUi::Ui::MenuOption::Component.new(
-                      title: label,
-                      size: item_size,
-                      selected: option_selected,
-                      html_options: option_html_options(label: label, option_value: option_value, selected: option_selected)
-                    ) do |option| %>
-                  <% option.with_leading do %>
-                    <span class="<%= SELECT_MARKER_CLASSES.join(' ') %>" aria-hidden="true">
-                      <%= lucide_icon("check",
-                                      class: ["h-3.5 w-3.5 transition-opacity", (option_selected ? "opacity-100" : "opacity-0")].join(" "),
-                                      data: indicator_data) %>
-                    </span>
+                <% if with_checkbox %>
+                  <%= render RbrunUi::Ui::MenuOption::Component.new(
+                        title: label,
+                        size: item_size,
+                        selected: option_selected,
+                        selected_class_name: selected_option_class,
+                        html_options: option_html_options(label: label, option_value: option_value, selected: option_selected)
+                      ) do |option| %>
+                    <% option.with_leading do %>
+                      <span class="<%= SELECT_MARKER_CLASSES.join(' ') %>" aria-hidden="true">
+                        <%= lucide_icon("check",
+                                        class: ["h-3.5 w-3.5 transition-opacity", (option_selected ? "opacity-100" : "opacity-0")].join(" "),
+                                        data: indicator_data) %>
+                      </span>
+                    <% end %>
                   <% end %>
+                <% else %>
+                  <%= render RbrunUi::Ui::MenuOption::Component.new(
+                        title: label,
+                        size: item_size,
+                        selected: option_selected,
+                        selected_class_name: selected_option_class,
+                        html_options: option_html_options(label: label, option_value: option_value, selected: option_selected)
+                      ) %>
                 <% end %>
               <% end %>
             <% end %>

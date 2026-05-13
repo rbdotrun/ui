@@ -7,4 +7,22 @@
     <%= ui("badge", label: "Bug", tone: :red) %>
     <%= ui("badge", label: "Neutral", tone: :neutral) %>
   <% end %>
+
+  <%= render "swatch",
+             title: "Length checks",
+             description: "Badge sizing should stay compact across short, medium, and longer taxonomy labels without collapsing into oversized pills." do %>
+    <%= ui("badge", label: "API", tone: :sky) %>
+    <%= ui("badge", label: "Needs review", tone: :neutral) %>
+    <%= ui("badge", label: "Customer migration", tone: :amber) %>
+    <%= ui("badge", label: "Regression risk", tone: :red) %>
+  <% end %>
+
+  <%= render "swatch",
+             title: "Sentence case",
+             description: "Badges stay in normal case so product copy reads naturally in tables, cards, and inline metadata clusters." do %>
+    <%= ui("badge", label: "In progress", tone: :sky) %>
+    <%= ui("badge", label: "Ready to ship", tone: :amber) %>
+    <%= ui("badge", label: "Blocked by auth", tone: :red) %>
+    <%= ui("badge", label: "Internal note", tone: :neutral) %>
+  <% end %>
 </div>

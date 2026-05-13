@@ -1,9 +1,10 @@
 <div class="mt-4 grid gap-4">
   <%= render "swatch",
              title: "Variants",
-             description: "The three core button styles. Primary for the main action on the page; secondary for adjacent or alternate actions; ghost for tertiary affordances that shouldn't compete visually." do %>
+             description: "The core button styles. Primary for the main action on the page; secondary for adjacent or alternate actions; white for header and toolbar triggers on tinted surfaces; ghost for tertiary affordances that shouldn't compete visually." do %>
     <%= ui "button", label: "Primary",   variant: :primary %>
     <%= ui "button", label: "Secondary", variant: :secondary %>
+    <%= ui "button", label: "White",     variant: :white %>
     <%= ui "button", label: "Ghost",     variant: :ghost %>
   <% end %>
 
@@ -20,6 +21,7 @@
              description: "Add `icon:` to anchor the action verb visually. The icon scales with the button size and sits to the left of the label with a fixed gap." do %>
     <%= ui "button", label: "Upload",   icon: "arrow-up" %>
     <%= ui "button", label: "Download", icon: "arrow-down", variant: :secondary %>
+    <%= ui "button", label: "Workspace", icon: "chevrons-up-down", variant: :white %>
     <%= ui "button", label: "Delete",   icon: "trash-2",    variant: :ghost %>
   <% end %>
 
@@ -36,6 +38,7 @@
              description: "Same variant ladder as labelled buttons. Reach for ghost in repeated row contexts where a primary fill would dominate the table." do %>
     <%= ui "button", icon: "arrow-up", variant: :primary %>
     <%= ui "button", icon: "arrow-up", variant: :secondary %>
+    <%= ui "button", icon: "arrow-up", variant: :white %>
     <%= ui "button", icon: "arrow-up", variant: :ghost %>
   <% end %>
 
@@ -44,6 +47,7 @@
              description: "Renders as visually muted and `aria-disabled`. The button is still focusable so users can tab through and read its tooltip — prefer this to hiding the action when the disabled reason is recoverable." do %>
     <%= ui "button", label: "Primary",   disabled: true %>
     <%= ui "button", label: "Secondary", variant: :secondary, disabled: true %>
+    <%= ui "button", label: "White",     variant: :white,     disabled: true %>
     <%= ui "button", label: "Ghost",     variant: :ghost,     disabled: true %>
     <%= ui "button", icon: "arrow-up", disabled: true %>
   <% end %>
@@ -53,6 +57,7 @@
              description: "Spinner replaces the icon, label is held invisible to preserve width. Prevents layout shift on async submit and signals the click registered without flipping the user into a disabled state." do %>
     <%= ui "button", label: "Saving…", loading: true %>
     <%= ui "button", label: "Saving…", variant: :secondary, loading: true %>
+    <%= ui "button", label: "Saving…", variant: :white,     loading: true %>
     <%= ui "button", label: "Saving…", variant: :ghost,     loading: true %>
     <%= ui "button", icon: "arrow-up", loading: true %>
   <% end %>
@@ -62,6 +67,7 @@
              description: "Pass `href:` and the same component renders an `<a>` with the matching styling. Use for navigation that looks like an action — external doc links, cancel-as-back-link, etc." do %>
     <%= ui "button", label: "Open docs", href: "https://example.com" %>
     <%= ui "button", label: "Cancel",    href: "#", variant: :secondary %>
+    <%= ui "button", label: "Workspace", href: "#", variant: :white %>
     <%= ui "button", icon: "external-link", href: "https://example.com", variant: :ghost %>
   <% end %>
 </div>

@@ -43,6 +43,59 @@ module RbrunUi
     include ViewComponentContrib::StyleVariants
     include LucideRails::RailsHelper
 
+    SEMANTIC_COLOR_SUITES = {
+      stone: {
+        border: "border-stone-200",
+        bg_soft: "bg-stone-100",
+        bg_panel: "bg-white",
+        text: "text-stone-700",
+        title: "text-stone-950",
+        body_with_title: "text-stone-600",
+        body_without_title: "text-stone-700",
+        icon: "text-stone-500"
+      },
+      amber: {
+        border: "border-amber-200",
+        bg_soft: "bg-amber-50",
+        bg_panel: "bg-amber-50/90",
+        text: "text-amber-700",
+        title: "text-amber-900",
+        body_with_title: "text-amber-800",
+        body_without_title: "text-amber-800",
+        icon: "text-amber-600"
+      },
+      sky: {
+        border: "border-sky-200",
+        bg_soft: "bg-sky-50",
+        bg_panel: "bg-sky-50/90",
+        text: "text-sky-700",
+        title: "text-sky-900",
+        body_with_title: "text-sky-800",
+        body_without_title: "text-sky-800",
+        icon: "text-sky-600"
+      },
+      emerald: {
+        border: "border-emerald-200",
+        bg_soft: "bg-emerald-50",
+        bg_panel: "bg-emerald-50/80",
+        text: "text-emerald-700",
+        title: "text-emerald-900",
+        body_with_title: "text-emerald-800",
+        body_without_title: "text-emerald-800",
+        icon: "text-emerald-600"
+      },
+      rose: {
+        border: "border-rose-200",
+        bg_soft: "bg-rose-50",
+        bg_panel: "bg-rose-50/90",
+        text: "text-rose-700",
+        title: "text-rose-900",
+        body_with_title: "text-rose-800",
+        body_without_title: "text-rose-800",
+        icon: "text-rose-600"
+      }
+    }.freeze
+
     style_config.postprocess_with do |classes|
       TailwindMerge::Merger.new.merge(classes.join(" "))
     end

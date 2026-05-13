@@ -20,6 +20,16 @@
   <% end %>
 
   <%= render "swatch",
+             title: "Default selected state — highlighted row, no checkbox",
+             description: "Single-select uses a slightly stronger selected background by default instead of reserving a checkbox column. This keeps labels aligned flush-left while still making the chosen row obvious." do %>
+    <%= ui("select",
+                  name: "demo[priority]",
+                  placeholder: "Priority",
+                  options: [["Low", "low"], ["Medium", "medium"], ["High", "high"]],
+                  value: "medium") %>
+  <% end %>
+
+  <%= render "swatch",
              title: "Sizes",
              description: "Three size tiers matching the rest of the form vocabulary. Pick sm for inline filters and toolbars, md for ordinary forms, lg when the select is the centrepiece of a flow." do %>
     <%= ui("select",
@@ -59,10 +69,11 @@
 
   <%= render "swatch",
              title: "Searchable grouped multi-select + footer action",
-             description: "The full kitchen-sink: `multiple: true` switches to checkbox semantics with array values, `searchable: true` filters the option list, `groups:` emits labelled sub-headers, and `footer_action:` pins a CTA at the bottom of the popup." do %>
+             description: "The full kitchen-sink: `multiple: true` plus `with_checkbox: true` switches to explicit checkbox-style semantics with stable leading alignment, `searchable: true` filters the option list, `groups:` emits labelled sub-headers, and `footer_action:` pins a CTA at the bottom of the popup." do %>
     <%= ui("select",
                   name: "demo[people]",
                   multiple: true,
+                  with_checkbox: true,
                   searchable: true,
                   placeholder: "Pick teammates…",
                   value: ["alice", "claire"],

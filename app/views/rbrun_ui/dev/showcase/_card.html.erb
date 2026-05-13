@@ -3,7 +3,7 @@
              title: "Fixed header + scrollable body + fixed footer",
              description: "The card primitive pins `header` and `footer` slots and lets the body scroll between them. Caller is responsible for height — give the card a bounded ancestor (`h-80` on the wrapper here) or it grows to fit its content." do %>
     <div class="h-80 w-full max-w-xl">
-      <%= ui("card", class_name: "h-full") do |card| %>
+      <%= ui("card") do |card| %>
         <% card.with_header do %>
           <%= ui("area_header") do |header| %>
             <% header.with_left do %>

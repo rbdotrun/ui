@@ -141,7 +141,7 @@ class RbrunUi::Ui::Menu::Component < RbrunUi::ApplicationViewComponent
 
     erb_template <<~ERB
       <div data-<%= menu_controller %>-target="static"
-           class="px-2.5 py-1 text-xs font-medium uppercase tracking-wide text-stone-500">
+           class="px-2.5 pt-1 pb-0.5 text-xs font-medium uppercase tracking-wide text-stone-500">
         <%= text %>
       </div>
     ERB

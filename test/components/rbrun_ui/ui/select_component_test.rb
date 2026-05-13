@@ -27,4 +27,32 @@ class RbrunUi::Ui::Select::ComponentTest < ViewComponent::TestCase
     assert_selector %(a[href="/people/new"]), text: "Add teammate", visible: false
     assert_text "Alice, Claire"
   end
+
+  test "uses stronger selected background without checkbox by default" do
+    render_inline(
+      RbrunUi::Ui::Select::Component.new(
+        name: "priority",
+        value: "medium",
+        options: [%w[Low low], %w[Medium medium], %w[High high]]
+      )
+    )
+
+    assert_selector %(button[role="option"][aria-selected="true"].bg-stone-200\\/70), count: 1, visible: false
+    refute_includes rendered_content, "opacity-0"
+  end
+
+  test "renders persistent checkbox column when enabled" do
+    render_inline(
+      RbrunUi::Ui::Select::Component.new(
+        name: "priority",
+        value: "medium",
+        with_checkbox: true,
+        options: [%w[Low low], %w[Medium medium], %w[High high]]
+      )
+    )
+
+    assert_selector %(button[role="option"][aria-selected="true"].bg-stone-100\\/60), count: 1, visible: false
+    assert_includes rendered_content, "opacity-0"
+    assert_includes rendered_content, "opacity-100"
+  end
 end

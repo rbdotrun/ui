@@ -10,7 +10,9 @@ class RbrunUi::Ui::Alert::ComponentTest < ViewComponent::TestCase
 
     assert_text "Sign-in required"
     assert_text "Please sign in to continue."
-    assert_selector %(section.border-rose-200.bg-rose-50\\/90)
+    assert_selector %(section.rounded.border-rose-200.bg-rose-50\\/90)
     assert_selector %(svg.text-rose-600)
+    assert_selector %(p.text-rose-900), text: "Sign-in required"
+    assert_selector %(p.text-rose-800), text: "Please sign in to continue."
   end
 end

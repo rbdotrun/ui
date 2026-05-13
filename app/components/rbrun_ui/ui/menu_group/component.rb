@@ -19,11 +19,11 @@ class RbrunUi::Ui::MenuGroup::Component < RbrunUi::ApplicationViewComponent
   end
 
   HEADER_CLASSES = %w[
-    px-2.5 py-1 text-xs font-medium uppercase tracking-wide text-stone-500
+    px-2.5 pt-1 pb-0.5 text-xs font-medium uppercase tracking-wide text-stone-500
   ].freeze
 
   BODY_CLASSES = %w[
-    flex flex-col gap-px
+    flex flex-col
   ].freeze
 
   renders_many :items
@@ -46,7 +46,7 @@ class RbrunUi::Ui::MenuGroup::Component < RbrunUi::ApplicationViewComponent
     <% if show_separator %>
       <hr role="separator"
           data-<%= menu_controller %>-target="static"
-          class="my-1 border-t border-border" />
+          class="my-0.5 border-t border-border" />
     <% end %>
   ERB
 end

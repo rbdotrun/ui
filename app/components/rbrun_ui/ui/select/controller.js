@@ -6,6 +6,8 @@
 // single-select close behavior.
 import { Controller } from "@hotwired/stimulus"
 
+const POPOVER_CLOSE_EVENT = "rbrun-ui--popover:close"
+
 export default class extends Controller {
   static targets = ["input", "inputs", "trigger", "label", "option"]
   static values  = {
@@ -27,7 +29,7 @@ export default class extends Controller {
 
     this.#selectSingleOption(optionEl)
     this.#dispatchChange(this.inputTarget)
-    this.element.dispatchEvent(new CustomEvent("ui-popover:close", { bubbles: true }))
+    this.element.dispatchEvent(new CustomEvent(POPOVER_CLOSE_EVENT, { bubbles: true }))
   }
 
   #selectSingleOption(optionEl) {

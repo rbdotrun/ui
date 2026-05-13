@@ -7,7 +7,7 @@ class RbrunUi::Ui::Card::Component < RbrunUi::ApplicationViewComponent
 
   def root_classes
     TailwindMerge::Merger.new.merge([
-      "overflow-hidden rounded-xl border border-border bg-white shadow-sm",
+      "flex h-full min-h-0 flex-col overflow-hidden rounded-xl border border-border bg-white shadow-sm",
       class_name
     ].compact.join(" "))
   end

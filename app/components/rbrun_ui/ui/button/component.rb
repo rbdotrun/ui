@@ -11,7 +11,7 @@
 #   component("button", label: "Saving…", loading: true)
 #   component("button", label: "Docs", href: "https://...")       # <a>
 #
-# Variants: :primary, :secondary, :ghost
+# Variants: :primary, :secondary, :white, :ghost
 # Sizes:    :sm, :md, :lg          (icon-only auto-squares to size's height)
 # type:     defaults to "button" so a bare <button> in a form doesn't
 #           submit accidentally. Pass type: "submit" for form actions.
@@ -60,6 +60,7 @@ class RbrunUi::Ui::Button::Component < RbrunUi::ApplicationViewComponent
       variant do
         primary   { %w[bg-primary text-white hover:opacity-90] }
         secondary { %w[bg-secondary text-stone-900 border border-border hover:bg-stone-200] }
+        white     { %w[bg-white text-stone-900 border border-border hover:bg-stone-50] }
         ghost     { %w[bg-transparent text-stone-700 hover:bg-secondary] }
       end
 

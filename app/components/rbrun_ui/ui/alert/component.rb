@@ -14,20 +14,43 @@ class RbrunUi::Ui::Alert::Component < RbrunUi::ApplicationViewComponent
     danger: "circle-alert"
   }.freeze
 
+  VARIANT_SUITES = {
+    info: :stone,
+    success: :emerald,
+    warning: :amber,
+    danger: :rose
+  }.freeze
+
+  PANEL_CLASSES = {
+    info: [SEMANTIC_COLOR_SUITES.dig(:stone, :border)],
+    success: [
+      SEMANTIC_COLOR_SUITES.dig(:emerald, :border),
+      SEMANTIC_COLOR_SUITES.dig(:emerald, :bg_panel)
+    ],
+    warning: [
+      SEMANTIC_COLOR_SUITES.dig(:amber, :border),
+      SEMANTIC_COLOR_SUITES.dig(:amber, :bg_panel)
+    ],
+    danger: [
+      SEMANTIC_COLOR_SUITES.dig(:rose, :border),
+      SEMANTIC_COLOR_SUITES.dig(:rose, :bg_panel)
+    ]
+  }.freeze
+
   style do
     base do
       %w[
-        flex items-start gap-3 rounded-xl border bg-white px-4 py-3 text-sm
+        flex items-start gap-3 rounded border bg-white px-4 py-3 text-sm
         text-stone-900 shadow-sm
       ]
     end
 
     variants do
       variant do
-        info    { %w[border-border] }
-        success { %w[border-emerald-200 bg-emerald-50/80] }
-        warning { %w[border-amber-200 bg-amber-50/90] }
-        danger  { %w[border-rose-200 bg-rose-50/90] }
+        info    { PANEL_CLASSES[:info] }
+        success { PANEL_CLASSES[:success] }
+        warning { PANEL_CLASSES[:warning] }
+        danger  { PANEL_CLASSES[:danger] }
       end
     end
   end
@@ -41,12 +64,7 @@ class RbrunUi::Ui::Alert::Component < RbrunUi::ApplicationViewComponent
   end
 
   def resolved_icon_class
-    palette = case variant.to_sym
-              when :success then "text-emerald-600"
-              when :warning then "text-amber-600"
-              when :danger  then "text-rose-600"
-              else "text-stone-500"
-              end
+    palette = suite.fetch(:icon)
 
     TailwindMerge::Merger.new.merge(["mt-0.5 h-4 w-4 shrink-0", palette, icon_class].compact.join(" "))
   end
@@ -55,17 +73,33 @@ class RbrunUi::Ui::Alert::Component < RbrunUi::ApplicationViewComponent
     TailwindMerge::Merger.new.merge(["min-w-0 flex-1", body_class].compact.join(" "))
   end
 
+  def title_class
+    "#{suite.fetch(:title)} font-medium leading-5"
+  end
+
+  def message_class
+    key = title.present? ? :with_title : :without_title
+    palette = suite.fetch(:"body_#{key}")
+    classes = [palette, "leading-5"]
+    classes.unshift("mt-1") if title.present?
+    classes.join(" ")
+  end
+
+  def suite
+    SEMANTIC_COLOR_SUITES.fetch(VARIANT_SUITES.fetch(variant.to_sym, :stone))
+  end
+
   erb_template <<~ERB
     <section class="<%= root_class %>">
       <%= lucide_icon(resolved_icon, class: resolved_icon_class) %>
 
       <div class="<%= resolved_body_class %>">
         <% if title.present? %>
-          <p class="font-medium leading-5 text-stone-950"><%= title %></p>
+          <p class="<%= title_class %>"><%= title %></p>
         <% end %>
 
         <% if message.present? %>
-          <p class="<%= title.present? ? 'mt-1 text-stone-600' : 'text-stone-700' %> leading-5"><%= message %></p>
+          <p class="<%= message_class %>"><%= message %></p>
         <% end %>
 
         <%= content if content.present? %>

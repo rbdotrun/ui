@@ -66,8 +66,8 @@ end %>
                       action_label: "Search",
                       interactive: true,
                       selects: [
-                        { name: "tasks[status]", placeholder: "Status", options: %w[backlog todo in_progress done canceled], trigger_class_name: "min-w-28" },
-                        { name: "tasks[priority]", placeholder: "Priority", options: %w[low medium high], trigger_class_name: "min-w-28" }
+                        { name: "tasks[status]", placeholder: "Status", options: %w[backlog todo in_progress done canceled] },
+                        { name: "tasks[priority]", placeholder: "Priority", options: %w[low medium high] }
                       ]) %>
       <% end %>
 
@@ -90,7 +90,7 @@ end %>
           <% row.cell(class_name: "whitespace-nowrap font-medium text-stone-500") { task[:id] } %>
           <% row.cell(class_name: "min-w-[28rem]") do %>
             <div class="flex items-center gap-3">
-              <%= ui("badge", label: task[:kind], tone: badge_tone.call(task[:kind]), class_name: "py-1 px-3") %>
+              <%= ui("badge", label: task[:kind], tone: badge_tone.call(task[:kind])) %>
               <span class="block max-w-[28rem] truncate text-stone-900"><%= task[:title] %></span>
             </div>
           <% end %>

@@ -23,7 +23,7 @@ class RbrunUi::Ui::PopupList::Component < RbrunUi::ApplicationViewComponent
   ].freeze
 
   BODY_CLASSES = %w[
-    flex max-h-64 flex-col gap-px overflow-y-auto p-1
+    flex max-h-64 flex-col overflow-y-auto p-1
   ].freeze
 
   renders_many :groups, RbrunUi::Ui::MenuGroup::Component
