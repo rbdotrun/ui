@@ -1,24 +1,23 @@
 <%# Engine layout — used by every controller the engine ships. %>
 <%# %>
-<%# Three things this layout owns that the host's layout does NOT %>
-<%# influence: %>
+<%# Two things this layout owns: %>
 <%# %>
 <%#   1. `javascript_importmap_tags("rbrun_ui/application", importmap: RbrunUi.importmap)` %>
 <%#      loads the engine's importmap (Floating UI CDN pins, engine %>
 <%#      sidecar pins, engine Stimulus app) into a separate %>
 <%#      `<script type=importmap>` tag from anything the host emits. %>
 <%# %>
-<%#   2. `stylesheet_link_tag("rbrun_ui/tailwind")` — engine's own %>
-<%#      compiled Tailwind CSS, with the gem's default `@theme` tokens. %>
-<%#      Host `@theme` overrides do NOT apply to engine pages — that %>
-<%#      isolation is by design (the showcase shows reference look). %>
-<%#      To override tokens on HOST pages, the host redeclares `@theme` %>
-<%#      in its own tailwind/application.css; see README. %>
+<%#   2. `stylesheet_link_tag("tailwind")` — the HOST's compiled %>
+<%#      Tailwind bundle. The host's `app/assets/tailwind/application.css` %>
+<%#      opts the engine in via `@import "../builds/tailwind/rbrun_ui"`, %>
+<%#      so engine utility classes land in this single host-served %>
+<%#      bundle. Host `@theme` overrides apply on engine pages too, %>
+<%#      because there's exactly one Tailwind compile in the system. %>
 <%# %>
-<%#   3. The Stimulus universe — the engine's aeno-style loader %>
-<%#      registers every component sidecar under `rbrun-ui--<name>` %>
-<%#      identifiers, isolated from any controllers the host has %>
-<%#      registered. No collisions by construction. %>
+<%#   The Stimulus universe — the engine's aeno-style loader %>
+<%#   registers every component sidecar under `rbrun-ui--<name>` %>
+<%#   identifiers, isolated from any controllers the host has %>
+<%#   registered. No collisions by construction. %>
 <!DOCTYPE html>
 <html>
   <head>
@@ -34,7 +33,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <%= stylesheet_link_tag "rbrun_ui/tailwind", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags "rbrun_ui/application", importmap: RbrunUi.importmap %>
   </head>
   <body class="font-sans antialiased text-stone-900">

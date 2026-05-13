@@ -62,26 +62,38 @@ The engine's `lib/rbrun_ui/engine.rb` automatically:
 ### 2 — Components on host pages
 
 If you want to render `ui(...)` components on your own routes (not just the
-engine's showcase), the host needs **two more wires**: the gem's
-precompiled Tailwind bundle in your layout, and the gem's Stimulus
+engine's showcase), the host needs **two more wires**: the engine's
+Tailwind utilities pulled into your CSS bundle, and the engine's Stimulus
 controllers registered against the host's Stimulus application.
 
-**a. Load the gem's precompiled CSS in your host layout** so utility classes
-the components emit (`fixed inset-0 z-50` for dialog, `data-[state=open]:…`
-arbitrary variants, etc.) are available without your host Tailwind compile
-having to scan the gem's templates:
+**a. Pull engine Tailwind utilities into your host bundle** via the official
+`tailwindcss-rails` (>= 4.4) Rails Engines support. The gem ships its
+Tailwind input at `app/assets/tailwind/rbrun_ui/engine.css`; the host opts
+in with one `@import` line in its own tailwind input:
+
+```css
+/* app/assets/tailwind/application.css */
+@import "tailwindcss";
+@import "../builds/tailwind/rbrun_ui";   /* opt-in to engine utilities */
+
+@theme {
+  /* your host's tokens; these win over the engine's defaults */
+}
+```
+
+On `tailwindcss:build` / `:watch`, `tailwindcss-rails` auto-discovers the
+engine and writes the `app/assets/builds/tailwind/rbrun_ui.css` shim that
+the `@import` above resolves to. One Tailwind watcher, one CSS bundle,
+served as `tailwind` by Propshaft — link it from your layout:
 
 ```erb
 <%# app/views/layouts/application.html.erb %>
 <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
-<%= stylesheet_link_tag "rbrun_ui/tailwind", "data-turbo-track": "reload" %>
 ```
 
-The gem ships its own pre-built `app/assets/stylesheets/rbrun_ui/tailwind.css`
-so you do **not** need to add `@source` directives to your own
-`tailwind/application.css` and you do **not** need to know where the gem
-lives in `bundler/gems/`. Bundle update the gem and the precompiled bundle
-follows automatically.
+No `@source` directives in your host CSS, no shipped precompiled bundle to
+keep in sync, no per-request fork/exec to rebuild. The gem stays a pure
+source distribution.
 
 **b. Register the engine's Stimulus controllers against the host's Stimulus
 application** so `data-controller="rbrun-ui--dialog"` etc. actually wakes up
@@ -140,15 +152,15 @@ render directly:
 <%= render RbrunUi::Ui::Button::Component.new(label: "Save") %>
 ```
 
-### Override design tokens (host pages)
+### Override design tokens
 
-Loading `rbrun_ui/tailwind` (step 2a above) gives the host the gem's
-default tokens — stone-based palette, IBM Plex Sans / Mono, etc. To
-override on **host** pages, redeclare tokens in your host
-`tailwind/application.css`:
+`engine.css` carries the gem's default tokens — stone-based palette, IBM
+Plex Sans / Mono. To override, redeclare tokens in your host
+`tailwind/application.css` **after** the engine `@import`:
 
 ```css
 @import "tailwindcss";
+@import "../builds/tailwind/rbrun_ui";
 
 @theme {
   --color-primary:   #4338ca;  /* indigo */
@@ -158,12 +170,12 @@ override on **host** pages, redeclare tokens in your host
 }
 ```
 
-Because your host bundle is loaded **after** `rbrun_ui/tailwind` in the
-layout (it's the last `stylesheet_link_tag`), your `@theme` redeclarations
-win cascade order: `bg-primary`, `border-border`, `font-sans`, etc. now
-resolve to your values on host pages. Engine-mounted pages still render
-with the gem's defaults — that isolation is by design (the showcase shows
-the reference look).
+Tailwind v4 rebuilds utilities from the latest `@theme` it sees, so your
+declarations win: `bg-primary`, `border-border`, `font-sans`, etc. resolve
+to your values everywhere — including the showcase, because there's exactly
+one Tailwind compile in the system. If you want the showcase pinned to the
+gem's reference look, mount the engine in a separate dummy app that has no
+`@theme` of its own.
 
 ### IBM Plex font
 
@@ -189,14 +201,14 @@ something custom, the convention is `rbrun-ui--<component>#<method>`.
 
 ```sh
 bundle install
-bundle exec rake test           # 24 runs, 140 assertions
-bin/rake rbrun_ui:tailwind_build  # recompile engine CSS bundle
-bin/rake rbrun_ui:tailwind_watch  # watch mode for component dev
+bundle exec rake test           # runs the dummy-app Minitest suite
 ```
 
-The engine ships with a precompiled `app/assets/stylesheets/rbrun_ui/tailwind.css`
-so consumers don't need to run anything to get the showcase working. Rebuild
-this file (and commit it) when you change component templates or tokens.
+The gem is a pure source distribution — no precompiled CSS to keep in
+sync. The host running `tailwindcss:watch` picks up edits to component
+templates / `style do` blocks / engine.css automatically, because the
+auto-generated `app/assets/builds/tailwind/rbrun_ui.css` shim re-imports
+this engine.css on every compile.
 
 ## License
 

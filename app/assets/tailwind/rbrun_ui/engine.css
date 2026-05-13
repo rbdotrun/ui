@@ -1,37 +1,34 @@
 /* ─────────────────────────────────────────────────────────────────────
- * rbrun_ui — Tailwind v4 source for the engine's compiled CSS bundle.
+ * rbrun_ui — Tailwind v4 input, auto-discovered by tailwindcss-rails.
  *
- * This file is the INPUT to `bin/rake rbrun_ui:tailwind_build`, which
- * compiles it into `app/assets/stylesheets/rbrun_ui/tailwind.css`. The
- * engine layout loads the COMPILED file via:
+ * The Rails Engines support in tailwindcss-rails (>= 4.4) iterates
+ * `Rails::Engine.subclasses` at `tailwindcss:build` / `:watch` time
+ * and picks up any engine that ships `app/assets/tailwind/
+ * <engine_name>/engine.css`. It writes a one-line `@import` shim at
+ * the host's `app/assets/builds/tailwind/rbrun_ui.css` pointing back
+ * here. The host opts in via:
  *
- *     <%= stylesheet_link_tag "rbrun_ui/tailwind" %>
+ *     @import "../builds/tailwind/rbrun_ui";
  *
- * Engine pages get the compiled CSS shipped in the gem. Host CSS does
- * not influence engine pages — that isolation is by design (the
- * showcase shows the gem's reference look, never a host-customized one).
+ * in its own `app/assets/tailwind/application.css`. One watcher, one
+ * compile, one bundle — both engine pages and host pages render from
+ * the same compiled CSS, served by the host's Propshaft.
  *
- * For HOST pages that use components via `<%= ui("button", …) %>`:
- * the host's Tailwind compile needs the gem's component directory in
- * its `@source` so utility classes the components emit (`bg-stone-900`,
- * `border-border`, etc.) get included in the host's bundle. Document
- * the host integration in README; the engine itself does not modify
- * the host's CSS.
+ * The `@source` paths below tell Tailwind to scan the engine's
+ * component / view / helper trees so every utility class referenced
+ * there (`bg-stone-900`, `border-border`, …) lands in the host's
+ * compiled bundle. Paths are relative to this file.
  *
- * Override design tokens on HOST pages by redeclaring `@theme` in the
- * host's tailwind input AFTER `@source`-ing the gem. `bg-primary`,
- * `border-border`, `font-sans`, etc. resolve to the host's values
- * because Tailwind v4 rebuilds utilities from the latest `@theme`
- * declaration in the input. ENGINE pages stay on the gem's defaults.
+ * The `@theme` block below carries the engine's default token values.
+ * Hosts override by redeclaring `@theme` in their own tailwind input
+ * AFTER this file is imported — Tailwind v4 rebuilds utilities from
+ * the latest `@theme` declaration it sees during compile.
  * ─────────────────────────────────────────────────────────────────────
  */
-@import "tailwindcss";
 
-/* Tell Tailwind to scan our component files for utility classes. The
- * engine's CSS is compiled standalone, so this `@source` makes the
- * compile aware of every utility class emitted by every component
- * template / `style do` block. */
 @source "../../../../app/components/rbrun_ui";
+@source "../../../../app/views/rbrun_ui";
+@source "../../../../app/helpers/rbrun_ui";
 
 @theme {
   /* Colors — semantic names. Override in the host's @theme to retheme
@@ -55,6 +52,34 @@
 @layer base {
   *, ::before, ::after {
     border-color: var(--color-border);
+  }
+
+  a[href],
+  button,
+  [role="button"],
+  [role="menuitem"],
+  [role="option"],
+  summary,
+  label[for],
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"],
+  a[href] *,
+  button *,
+  [role="button"] *,
+  [role="menuitem"] *,
+  [role="option"] *,
+  summary *,
+  label[for] *,
+  input[type="button"] *,
+  input[type="submit"] *,
+  input[type="reset"] * {
+    cursor: pointer !important;
+  }
+
+  :disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed !important;
   }
 }
 

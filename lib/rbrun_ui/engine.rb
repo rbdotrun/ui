@@ -51,7 +51,6 @@ module RbrunUi
         app.config.assets.paths << root.join("app/javascript")
         app.config.assets.paths << root.join("app/components")
         app.config.assets.paths << root.join("app/assets/stylesheets")
-        app.config.assets.paths << root.join("app/assets/tailwind")
       end
     end
 
