@@ -30,7 +30,7 @@ class RbrunUi::Dev::ShowcaseControllerTest < ActionDispatch::IntegrationTest
                       "expected showcase index to render an <h2> for #{section}"
     end
 
-    assert_includes body, "Vanilla flash"
+    assert_includes body, "Inline flash"
     assert_includes body, "Background job flash"
   end
 
@@ -43,21 +43,21 @@ class RbrunUi::Dev::ShowcaseControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, "Component showcase"
   end
 
-  test "POST /_dev/showcase/flash-demo/vanilla redirects back with flash" do
-    post "/_dev/showcase/flash-demo/vanilla"
+  test "POST /_dev/showcase/flash-demo/vanilla responds with a turbo_stream appending the flash" do
+    post "/_dev/showcase/flash-demo/vanilla", as: :turbo_stream
 
-    assert_redirected_to "/_dev/showcase/flash"
-    follow_redirect!
     assert_response :ok
+    assert_equal Mime[:turbo_stream].to_s, @response.media_type
     assert_includes @response.body, "Signed in successfully."
     assert_includes @response.body, 'data-controller="rbrun-ui--flash"'
+    assert_includes @response.body, 'target="rbrun-ui-flash-demo-tray"'
   end
 
-  test "POST /_dev/showcase/flash-demo/async enqueues a broadcast job" do
+  test "POST /_dev/showcase/flash-demo/async enqueues a broadcast job and responds 204" do
     assert_enqueued_with(job: RbrunUi::Dev::FlashDemoJob) do
-      post "/_dev/showcase/flash-demo/async"
+      post "/_dev/showcase/flash-demo/async", as: :turbo_stream
     end
 
-    assert_redirected_to "/_dev/showcase/flash"
+    assert_response :no_content
   end
 end

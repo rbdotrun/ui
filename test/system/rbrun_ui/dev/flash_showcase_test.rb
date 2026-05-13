@@ -10,16 +10,16 @@ class RbrunUi::Dev::FlashShowcaseTest < ApplicationSystemTestCase
     ActiveJob::Base.queue_adapter = @previous_adapter
   end
 
-  test "vanilla flash button renders a toast after redirect" do
+  test "inline flash button renders a toast via turbo-stream response (no navigation)" do
     visit "/_dev/showcase/flash"
 
-    click_button "Vanilla flash"
+    click_button "Inline flash"
 
     assert_current_path "/_dev/showcase/flash"
     assert_selector %[#rbrun-ui-flash-tray article[data-controller="rbrun-ui--flash"]], text: "Signed in successfully.", wait: 5
   end
 
-  test "background job button broadcasts a toast into the tray" do
+  test "background job button broadcasts a toast into the tray (no navigation)" do
     visit "/_dev/showcase/flash"
 
     click_button "Background job flash"

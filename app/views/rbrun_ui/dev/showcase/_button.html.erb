@@ -65,9 +65,9 @@
   <%= render "swatch",
              title: "As link (href:)",
              description: "Pass `href:` and the same component renders an `<a>` with the matching styling. Use for navigation that looks like an action — external doc links, cancel-as-back-link, etc." do %>
-    <%= ui "button", label: "Open docs", href: "https://example.com" %>
+    <%= ui "button", label: "Open docs", href: "#" %>
     <%= ui "button", label: "Cancel",    href: "#", variant: :secondary %>
     <%= ui "button", label: "Workspace", href: "#", variant: :white %>
-    <%= ui "button", icon: "external-link", href: "https://example.com", variant: :ghost %>
+    <%= ui "button", icon: "external-link", href: "#", variant: :ghost %>
   <% end %>
 </div>

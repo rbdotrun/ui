@@ -1,13 +1,13 @@
 <div class="mt-4 grid gap-4">
   <%= render "swatch",
              title: "Toast demos",
-             description: "Two implementation paths. The first sets a plain redirect flash. The second enqueues a background job that broadcasts into the page's toast tray. Default auto-dismiss is 4.2 seconds; pass `duration:` to keep a toast around longer." do %>
+             description: "Two implementation paths, both Turbo-only (no page refresh). The first responds inline with a synchronous Turbo Stream that appends the flash to the toast tray. The second enqueues a background job that broadcasts via `turbo_stream_from`, so the flash arrives ~1 s after the click. Default auto-dismiss is 4.2 seconds; pass `duration:` to keep a toast around longer." do %>
     <div class="flex flex-wrap items-center gap-3">
-      <%= form_with url: flash_demo_vanilla_path, method: :post, class: "contents", data: { turbo: false } do %>
-        <%= ui "button", label: "Vanilla flash", type: "submit" %>
+      <%= form_with url: flash_demo_vanilla_path, method: :post, class: "contents" do %>
+        <%= ui "button", label: "Inline flash", type: "submit" %>
       <% end %>
 
-      <%= form_with url: flash_demo_async_path, method: :post, class: "contents", data: { turbo: false } do %>
+      <%= form_with url: flash_demo_async_path, method: :post, class: "contents" do %>
         <%= ui "button", label: "Background job flash", variant: :secondary, type: "submit" %>
       <% end %>
     </div>
